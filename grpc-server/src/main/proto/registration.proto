@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+/*
+java_multiple_files (default value: false)
+- false일 경우 .proto 파일로 생성될 클래스 파일이 하나로 생성됨
+- true일 경우 .proto 파일로 생성될 클래스 파일이 나뉘어 생성됨
+ */
+option java_multiple_files = true;
+option java_package = "com.phonil.registration";  // .proto 파일로 생성될 클래스 파일이 위치할 패키지명
+option java_outer_classname = "registrationProto";  // .proto 파일로 생성될 클래스 파일명
+
+// 수강 신청 서비스
+service RegistrationService {
+  rpc getAllStudentData (Empty) returns (StudentResponse);
+  rpc getAllCourseData (Empty) returns (CourseResponse);
+}
+
+// 빈 요청 메시지 정의
+message Empty {}
+
+// Student 객체 정의
+message StudentInfo {
+  string studentId = 1;
+  string name = 2;
+  string department = 3;
+  repeated string completedCourses = 4;
+}
+
+// 응답 메시지 정의 (서버 -> 클라이언트)
+message StudentResponse {
+  repeated StudentInfo studentInfo = 1;
+}
+
+message CourseInfo {
+  string courseId = 1;
+  string professorLastName = 2;
+  string courseName = 3;
+  repeated string preSubjects = 4;
+}
+
+message CourseResponse {
+  repeated CourseInfo courseInfo = 1;
+}
+
+// 로그인 / 회원 가입 서비스
+service AuthService {
+  rpc login (LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string loginId = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+}
